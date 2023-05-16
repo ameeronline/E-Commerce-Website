@@ -1,0 +1,103 @@
+<section>
+    <div class="container">
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+
+                    <th scope="row">1</th>
+                    <td><img style="width: 50px; height: 50px;" src="product-images/{{this.product._id}}.jpg" alt="">
+                    </td>
+                    <td>{{this.product.Name}}</td>
+                    <td>{{this.product.Price}}</td>
+
+                    <td>
+                        <button type="button" class="btn btn-light mr-3"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../userId}}',-1)">-</button>
+                        <span id="{{this.product._id}}">{{this.quantity}}</span>
+                        <button type="button" class="btn btn-light mr-3"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../userId}}',1)">+</button>
+                    </td>
+                    <td><button type="button" class="btn btn-danger"
+                            onclick="removeCartProduct('{{this._id}}','{{this.product._id}}')">Remove</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    
+    <hr>
+    <div class="cartTotal">
+    <h4 class="" style="">Total: Rs. <span id="total">{{totalValue}}</span></h4>
+    <a href="/place-order" class=""><button style="width: 190px;" class="btn btn-success">Place Order</button></a>
+
+    <style>
+        .cartTotal {
+            text-align: right;
+            margin-right: 15%;
+            margin-top: 2%;
+        }
+        .placeOrder {
+            text-align: right;
+            margin-right: 15%;
+            margin-top: 2%;
+        }
+    </style>
+    </div>
+</section>
+
+<script>
+    function changeQuantity(cartId, productId, userId , count) {
+        let quantity=parseInt(document.getElementById(productId).innerHTML)
+        count=parseInt(count)
+        $.ajax({
+            url: '/change-product-quantity',
+            data: {
+                user: userId,
+                cart: cartId,
+                product: productId,
+                count: count,
+                quantity:quantity
+            },
+            method: 'post',
+            success: (response) => {
+                if(response.removeProduct){
+                    alert("Product remover from cart")
+                    location.reload()
+                }else{
+                    document.getElementById(productId).innerHTML=quantity+count
+                    document.getElementById('total').innerHTML=response.total
+                    
+                }
+            }
+        })
+
+    }
+    function removeCartProduct(cartId,proId){
+        $.ajax({
+            url: '/remove-cart-product',
+            data: {
+                cart: cartId,
+                product: proId
+            },
+            method: 'post',
+            success: (response) => {
+            if (response.removeCartProduct) {
+                alert('Product Removed Successfully');
+                location.reload();
+                
+            }
+            }
+        })
+    }
+</script>

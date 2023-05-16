@@ -1,0 +1,43 @@
+<section>
+    <div class="container mt-4">
+        <div class="row col-md-6">
+            <h2 class="text-center">Edit Product</h2>
+            <form action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="">Product Name</label>
+                    <input type="text" name="Name" value="{{product.Name}}" class="form-control" id="" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="">Category</label>
+                    <input type="text" name="Category" value="{{product.Category}}" class="form-control" id="" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="">Price</label>
+                    <input type="text" name="Price" value="{{product.Price}}" class="form-control" id="" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <input type="text" name="Description" value="{{product.Description}}" class="form-control" id="textAreaExample3" placeholder="">
+                </div>
+                <div class="form-group">
+                    
+                    <img src="/product-images/{{product._id}}.jpg" id="imageView" alt="" style="width: 100px; height:auto">
+                    <br>
+                    <label for="">Replace Image</label>
+                    <input type="file" name="Image" class="form-control" onchange="viewImage(event)" placeholder="">
+                </div>
+                <div class="form-group">
+                    <!-- <input type="hidden" name="Description" value="{{product._id}}" class="form-control" id="textAreaExample3" placeholder=""> -->
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-5">Submit</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    function viewImage(event){
+        document.getElementById('imageView').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>
